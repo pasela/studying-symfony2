@@ -1,3 +1,7 @@
-ExampleExampleBundle_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ExampleExampleBundle:Default:index }
+# ExampleExampleBundle_homepage:
+#     pattern:  /hello/{name}
+#     defaults: { _controller: ExampleExampleBundle:Default:index }
+
+example:
+    resource:   "@ExampleExampleBundle/Controller"
+    type:       annotation
