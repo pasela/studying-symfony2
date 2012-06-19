@@ -1,0 +1,68 @@
+{% extends 'ExampleExampleBundle::default_layout.html.twig' %}
+{% block title %}ユーザ登録{% endblock %}
+{% block main %}
+<h1>ユーザ登録</h1>
+
+<form action="{{ path('user_register_input' )}}" method="post" class="well form-horizontal">
+  <div class="control-group">
+    <label for="email" class="control-label">メールアドレス</label>
+    <div class="controls">
+      <input type="email" id="email" name="email" required="required" />
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label for="password" class="control-label">パスワード</label>
+    <div class="controls">
+      <input type="password" id="password" name="password" required="required" />
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label for="password_confirm" class="control-label">パスワード(確認)</label>
+    <div class="controls">
+      <input type="password" id="password_confirm" name="password_confirm" required="required" />
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label for="name" class="control-label">名前</label>
+    <div class="controls">
+      <input type="text" id="name" name="name" required="required" />
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label for="sex" class="control-label">性別</label>
+    <div class="controls">
+        <select id="sex" name="sex">
+        <option value="">性別を選択</option>
+        <option value="1">男性</option>
+        <option value="2">女性</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label for="birthday" class="control-label">生年月日</label>
+    <div class="controls">
+      <select id="birthday_year" name="birthday_year" class="input-mini">
+        <option value="">年</option>
+        <option value="2012">2012</option>
+      </select>/
+      <select id="birthday_month" name="birthday_month" class="input-mini">
+        <option value="">月</option>
+        <option value="1">1</option>
+      </select>/
+      <select id="birthday_day" name="birthday_day" class="input-mini">
+        <option value="">日</option>
+        <option value="1">1</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <input type="submit" value="登録確認" class="btn btn-primary" />
+  </div>
+</form>
+{% endblock %}

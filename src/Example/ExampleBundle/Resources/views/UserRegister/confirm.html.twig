@@ -1,0 +1,34 @@
+{% extends 'ExampleExampleBundle::default_layout.html.twig' %}
+{% block title %}ユーザ登録確認{% endblock %}
+{% block main %}
+<h1>ユーザ登録確認</h1>
+
+<table class="table table-bordered">
+  <col span="1" style="width:16em"/>
+  <tbody>
+    <tr>
+      <th>メールアドレス</th>
+      <td>you@example.com</td>
+    </tr>
+    <tr>
+      <th>名前</th>
+      <td>見本 太郎</td>
+    </tr>
+    <tr>
+      <th>性別</th>
+      <td>男性</td>
+    </tr>
+    <tr>
+      <th>生年月日</th>
+      <td>2012年1月1日</td>
+    </tr>
+  </tbody>
+</table>
+
+<form action="{{ path('user_register_confirm' )}}" method="post" class="well form-horizontal">
+  <div>
+    <input type="submit" name="register" value="登録" class="btn btn-primary" />
+    <input type="submit" name="edit" value="戻る" class="btn" />
+  </div>
+</form>
+{% endblock %}
