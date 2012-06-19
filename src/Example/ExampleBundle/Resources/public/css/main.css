@@ -1,0 +1,27 @@
+.radio-inline input {
+  margin-top: 5px;
+  margin-right: 5px;
+  float: left;
+}
+
+.radio-inline label {
+  margin-top: 5px;
+}
+
+.required-mark {
+  padding-top: 5px;
+  float: left;
+  color: #ff6666;
+}
+
+.required-mark:after {
+  content: "";
+  clear: both;
+  height: 0;
+  display: block;
+  visibility: hidden;
+}
+
+.form-error-list {
+  color: #b94a48;
+}

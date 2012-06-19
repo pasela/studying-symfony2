@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Example\ExampleBundle\Entity\User;
+use Example\ExampleBundle\Form\Type\UserRegisterType;
 
 
 class UserRegisterController extends Controller
@@ -16,11 +18,23 @@ class UserRegisterController extends Controller
      */
     public function inputAction(Request $request)
     {
+        $user = new User();
+        $form = $this->createForm(new UserRegisterType(), $user);
+
         if ($request->getMethod() === 'POST') {
-            return $this->redirect($this->generateUrl('user_register_confirm'));
+            $data = $request->request->get($form->getName());
+            $form->bind($data);
+            if ($form->isValid()) {
+                $request->getSession()->set('user/register', $data);
+                return $this->redirect($this->generateUrl('user_register_confirm'));
+            }
+        } elseif ($request->getSession()->has('user/register')) {
+            $data = $request->getSession()->get('user/register');
+            $data['_token'] = $form['_token']->getData();
+            $form->bind($data);
         }
 
-        return array();
+        return array('form' => $form->createView());
     }
 
     /**

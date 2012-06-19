@@ -1,0 +1,32 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block field_label %}
+{% spaceless %}
+  {{ parent() }}
+  {% if required %}
+    <span class="required-mark" title="必須">*</span>
+  {% endif %}
+{% endspaceless %}
+{% endblock %}
+
+{% block field_errors %}
+  {% spaceless %}
+    {% if errors|length > 0 %}
+      <div class="form-error-list">
+        {% for error in errors %}
+          <span>{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</span><br />
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endspaceless %}
+{% endblock %}
+
+{% block field_row %}
+<div class="control-group{% if errors|length > 0 %} error{% endif %}">
+    {{ form_label(form, null, {'attr': {'class': 'control-label'}}) }}
+    <div class="controls">
+      {{ form_widget(form) }}
+      {{ form_errors(form) }}
+    </div>
+  </div>
+{% endblock field_row %}
