@@ -8,19 +8,19 @@
   <tbody>
     <tr>
       <th>メールアドレス</th>
-      <td>you@example.com</td>
+      <td>{{ user.email }}</td>
     </tr>
     <tr>
       <th>名前</th>
-      <td>見本 太郎</td>
+      <td>{{ user.name }}</td>
     </tr>
     <tr>
       <th>性別</th>
-      <td>男性</td>
+      <td>{{ user.sex ? sexTypes[user.sex] : '指定なし' }}</td>
     </tr>
     <tr>
       <th>生年月日</th>
-      <td>2012年1月1日</td>
+      <td>{{ user.birthday ? user.birthday|date('Y年n月j日') : '指定なし' }}</td>
     </tr>
   </tbody>
 </table>
@@ -28,7 +28,7 @@
 <form action="{{ path('user_register_confirm' )}}" method="post" class="well form-horizontal">
   <div>
     <input type="submit" name="register" value="登録" class="btn btn-primary" />
-    <input type="submit" name="edit" value="戻る" class="btn" />
+    <input type="submit" name="back" value="戻る" class="btn" />
   </div>
 </form>
 {% endblock %}

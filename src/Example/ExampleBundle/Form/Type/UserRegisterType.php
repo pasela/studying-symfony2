@@ -4,6 +4,7 @@ namespace Example\ExampleBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Example\ExampleBundle\Entity\User;
 
 
 class UserRegisterType extends AbstractType
@@ -32,7 +33,7 @@ class UserRegisterType extends AbstractType
 
         $builder->add('sex', 'choice', array(
             'label' => '性別',
-            'choices' => array('1' => '男性', '2' => '女性', '0' => '登録しない'),
+            'choices' => User::$sexTypes,
             'expanded' => true,
             // 'empty_value' => '性別を選んでください',
             // 'empty_data' => null,

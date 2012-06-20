@@ -7,6 +7,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class User
 {
+    const SEX_MALE    = 1;
+    const SEX_FEMALE  = 2;
+    const SEX_UNKNOWN = 0;
+
+    public static $sexTypes = array(
+        self::SEX_MALE    => '男性',
+        self::SEX_FEMALE  => '女性',
+        self::SEX_UNKNOWN => '登録しない',
+    );
+
     /**
      * @Assert\NotBlank(groups={"register"})
      * @Assert\Email(groups={"register"})

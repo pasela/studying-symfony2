@@ -18,6 +18,7 @@ class UserRegisterController extends Controller
      */
     public function inputAction(Request $request)
     {
+        $session = $request->getSession();
         $user = new User();
         $form = $this->createForm(new UserRegisterType(), $user);
 
@@ -25,11 +26,11 @@ class UserRegisterController extends Controller
             $data = $request->request->get($form->getName());
             $form->bind($data);
             if ($form->isValid()) {
-                $request->getSession()->set('user/register', $data);
+                $session->set('user/register', $data);
                 return $this->redirect($this->generateUrl('user_register_confirm'));
             }
-        } elseif ($request->getSession()->has('user/register')) {
-            $data = $request->getSession()->get('user/register');
+        } elseif ($session->has('user/register')) {
+            $data = $session->get('user/register');
             $data['_token'] = $form['_token']->getData();
             $form->bind($data);
         }
@@ -43,16 +44,23 @@ class UserRegisterController extends Controller
      */
     public function confirmAction(Request $request)
     {
-        if ($request->getMethod() === 'POST') {
-            if ($request->request->has('edit')) {
-                $url = $this->generateUrl('user_register_input');
-            } else {
-                $url = $this->generateUrl('user_register_complete');
-            }
-            return $this->redirect($url);
+        $user = new User();
+
+        if (!$this->restoreForm(new UserRegisterType(), $user, 'user/register')) {
+            return $this->redirect($this->generateUrl('user_register_input'));
         }
 
-        return array();
+        if ($request->getMethod() === 'POST') {
+            if ($request->request->has('back')) {
+                return $this->redirect($this->generateUrl('user_register_input'));
+            } else {
+                // TODO: complete logic; register new record, send email, etc...
+                $request->getSession()->remove('user/register');
+                return $this->redirect($this->generateUrl('user_register_complete'));
+            }
+        }
+
+        return array('user' => $user, 'sexTypes' => User::$sexTypes);
     }
 
     /**
@@ -62,5 +70,24 @@ class UserRegisterController extends Controller
     public function completeAction(Request $request)
     {
         return array();
+    }
+
+    private function restoreForm($type, User $user, $key)
+    {
+        $session = $this->getRequest()->getSession();
+
+        if ($session->has($key)) {
+            $data = $session->get($key);
+            if (isset($data['_token'])) {
+                unset($data['_token']);
+            }
+
+            $form = $this->createForm($type, $user, array('csrf_protection' => false));
+            $form->bind($data);
+
+            return $form->isValid();
+        }
+
+        return false;
     }
 }
