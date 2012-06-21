@@ -4,6 +4,7 @@ namespace Example\ExampleBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="users")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields={"email"}, groups={"register"}, message="このメールアドレスは既に登録されています")
  */
 class User implements UserInterface
 {
@@ -32,7 +34,7 @@ class User implements UserInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank(groups={"register"})
      * @Assert\Email(groups={"register"})
      */
@@ -171,7 +173,7 @@ class User implements UserInterface
 
     public function equals(UserInterface $user)
     {
-        return $user->id === $this->id;
+        return $user->email === $this->email;
     }
 
     /**
