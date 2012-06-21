@@ -3,9 +3,16 @@
 namespace Example\ExampleBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 
-class User
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="users")
+ * @ORM\HasLifecycleCallbacks()
+ */
+class User implements UserInterface
 {
     const SEX_MALE    = 1;
     const SEX_FEMALE  = 2;
@@ -18,12 +25,21 @@ class User
     );
 
     /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(groups={"register"})
      * @Assert\Email(groups={"register"})
      */
     protected $email;
 
     /**
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(groups={"register"})
      */
     protected $password;
@@ -34,19 +50,32 @@ class User
     protected $password_confirm;
 
     /**
+     * @ORM\Column(type="string", length=20, nullable="true")
      * @Assert\MaxLength(limit=20, groups={"register"})
      */
     protected $name;
 
     /**
+     * @ORM\Column(type="smallint", nullable="true")
      * @Assert\Choice(choices={1, 2, 0}, groups={"register"})
      */
     protected $sex;
 
     /**
+     * @ORM\Column(type="date", nullable="true")
      * @Assert\Date(groups={"register"})
      */
     protected $birthday;
+
+    /**
+     * @ORM\Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", name="updated_at")
+     */
+    protected $updatedAt;
 
     public function __construct()
     {
@@ -119,5 +148,47 @@ class User
     public function setBirthday(\DateTime $birthday = null)
     {
         $this->birthday = $birthday;
+    }
+
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function getSalt()
+    {
+        return $this->email;
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function equals(UserInterface $user)
+    {
+        return $user->id === $this->id;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $now = new \DateTime();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
     }
 }

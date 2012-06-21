@@ -54,7 +54,12 @@ class UserRegisterController extends Controller
             if ($request->request->has('back')) {
                 return $this->redirect($this->generateUrl('user_register_input'));
             } else {
-                // TODO: complete logic; register new record, send email, etc...
+                $encoder = $this->get('security.encoder_factory')->getEncoder($user);
+                $user->setPassword($encoder->encodePassword($user->getPassword(), $user->getSalt()));
+
+                $em = $this->getDoctrine()->getEntityManager();
+                $em->persist($user);
+                $em->flush();
                 $request->getSession()->remove('user/register');
                 return $this->redirect($this->generateUrl('user_register_complete'));
             }
