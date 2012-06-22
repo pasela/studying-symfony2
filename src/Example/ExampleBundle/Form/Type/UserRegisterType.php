@@ -16,14 +16,13 @@ class UserRegisterType extends AbstractType
             'required' => true,
         ));
 
-        $builder->add('password', 'password', array(
-            'label' => 'パスワード',
-            'required' => true,
-        ));
-
-        $builder->add('password_confirm', 'password', array(
-            'label' => 'パスワード(確認)',
-            'required' => true,
+        $builder->add('password', 'repeated', array(
+            'type' => 'password',
+            'invalid_message' => '同じ値を入力してください',
+            'options' => array(
+                'label' => 'パスワード',
+                'required' => true,
+            ),
         ));
 
         $builder->add('name', 'text', array(

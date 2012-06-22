@@ -23,5 +23,6 @@
 }
 
 .form-error-list {
+  clear: both;
   color: #b94a48;
 }

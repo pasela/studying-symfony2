@@ -47,11 +47,6 @@ class User implements UserInterface
     protected $password;
 
     /**
-     * @Assert\NotBlank(groups={"register"})
-     */
-    protected $password_confirm;
-
-    /**
      * @ORM\Column(type="string", length=20, nullable="true")
      * @Assert\MaxLength(limit=20, groups={"register"})
      */
@@ -102,24 +97,6 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
-    }
-
-    public function getPasswordConfirm()
-    {
-        return $this->password_confirm;
-    }
-
-    public function setPasswordConfirm($password_confirm)
-    {
-        $this->password_confirm = $password_confirm;
-    }
-
-    /**
-     * @Assert\True(message="パスワードが一致しません", groups={"register"})
-     */
-    public function isPasswordEquals()
-    {
-        return $this->password === $this->password_confirm;
     }
 
     public function getName()
