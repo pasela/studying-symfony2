@@ -10,10 +10,27 @@ use Example\ExampleBundle\Entity\User;
 use Example\ExampleBundle\Form\Type\UserRegisterType;
 
 
+/**
+ * @Route("/user")
+ */
 class UserRegisterController extends Controller
 {
     /**
-     * @Route("/user/register", name="user_register_input")
+     * @Route("/register", name="user_register")
+     * @Template
+     */
+    public function topAction(Request $request)
+    {
+        $session = $request->getSession();
+        if ($session->has('user/register')) {
+            $session->remove('user/register');
+        }
+
+        return $this->redirect($this->generateUrl('user_register_input'));
+    }
+
+    /**
+     * @Route("/register/input", name="user_register_input")
      * @Template
      */
     public function inputAction(Request $request)
@@ -39,7 +56,7 @@ class UserRegisterController extends Controller
     }
 
     /**
-     * @Route("/user/register/confirm", name="user_register_confirm")
+     * @Route("/register/confirm", name="user_register_confirm")
      * @Template
      */
     public function confirmAction(Request $request)
@@ -69,7 +86,7 @@ class UserRegisterController extends Controller
     }
 
     /**
-     * @Route("/user/register/complete", name="user_register_complete")
+     * @Route("/register/complete", name="user_register_complete")
      * @Template
      */
     public function completeAction(Request $request)
