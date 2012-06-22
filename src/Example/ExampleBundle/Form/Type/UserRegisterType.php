@@ -16,7 +16,7 @@ class UserRegisterType extends AbstractType
             'required' => true,
         ));
 
-        $builder->add('password', 'repeated', array(
+        $builder->add('rawPassword', 'repeated', array(
             'type' => 'password',
             'invalid_message' => '同じ値を入力してください',
             'options' => array(

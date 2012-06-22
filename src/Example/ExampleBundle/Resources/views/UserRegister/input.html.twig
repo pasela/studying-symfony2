@@ -14,17 +14,17 @@
   {{ form_row(form.email) }}
 
   <div class="control-group">
-    {{ form_label(form.password.first, null, {'attr': {'class': 'control-label'}}) }}
+    {{ form_label(form.rawPassword.first, null, {'attr': {'class': 'control-label'}}) }}
     <div class="controls radio-inline">
-      {{ form_widget(form.password.first) }}
+      {{ form_widget(form.rawPassword.first) }}
     </div>
   </div>
 
   <div class="control-group">
-    {{ form_label(form.password.second, 'パスワード(確認)', {'attr': {'class': 'control-label'}}) }}
+    {{ form_label(form.rawPassword.second, 'パスワード(確認)', {'attr': {'class': 'control-label'}}) }}
     <div class="controls radio-inline">
-      {{ form_widget(form.password.second) }}
-      {{ form_errors(form.password) }}
+      {{ form_widget(form.rawPassword.second) }}
+      {{ form_errors(form.rawPassword) }}
     </div>
   </div>
 

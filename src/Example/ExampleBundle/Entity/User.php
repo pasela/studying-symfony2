@@ -4,6 +4,7 @@ namespace Example\ExampleBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,6 +17,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User implements UserInterface
 {
+    const HASH_ALGORITHM  = 'sha512';
+    const HASH_ITERATIONS = 5000;
+
     const SEX_MALE    = 1;
     const SEX_FEMALE  = 2;
     const SEX_UNKNOWN = 0;
@@ -45,6 +49,11 @@ class User implements UserInterface
      * @Assert\NotBlank(groups={"register"})
      */
     protected $password;
+
+    /**
+     * @Assert\NotBlank(groups={"register"})
+     */
+    protected $rawPassword;
 
     /**
      * @ORM\Column(type="string", length=20, nullable="true")
@@ -97,6 +106,34 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    public function getRawPassword()
+    {
+        return $this->rawPassword;
+    }
+
+    public function setRawPassword($rawPassword)
+    {
+        $this->rawPassword = $rawPassword;
+        $this->setPassword(self::encodePassword($rawPassword, $this->getSalt()));
+    }
+
+    public function isPasswordValid($rawPassword)
+    {
+        $encoder = self::getEncoder();
+        return $encoder->isPasswordValid($this->getPassword(), $rawPassword, $this->getSalt());
+    }
+
+    protected static function encodePassword($rawPassword, $salt)
+    {
+        $encoder = self::getEncoder();
+        return $encoder->encodePassword($rawPassword, $salt);
+    }
+
+    protected static function getEncoder()
+    {
+        return new MessageDigestPasswordEncoder(self::HASH_ALGORITHM, true, self::HASH_ITERATIONS);
     }
 
     public function getName()
